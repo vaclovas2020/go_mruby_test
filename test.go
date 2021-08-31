@@ -1,24 +1,15 @@
 package main
 
 import (
+	"flag"
+
 	mruby "webimizer.dev/go_mruby"
 )
 
 func main() {
-	mruby.Mruby_load_from_string(`# The Greeter class
-	class Greeter
-	  def initialize(name)
-		@name = name.capitalize
-	  end
-	
-	  def salute
-		puts "Hello #{@name}!"
-	  end
-	end
-	
-	# Create a new object
-	g = Greeter.new("world")
-	
-	# Output "Hello World!"
-	g.salute`)
+	exefile := flag.String("mrb-file", "", "mrb file path")
+	flag.Parse()
+	mruby.Mruby_open()
+	defer mruby.Mruby_close()
+	mruby.Mruby_load_irep_file(*exefile)
 }
